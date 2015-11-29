@@ -1,0 +1,95 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeMap;
+
+/**
+ * This class is create to count the number of work in a book
+ * @author khoi
+ *
+ */
+public class Q2 {
+
+	private Map<String, Integer> bookMap;	// hold book
+
+	Q2() {
+		bookMap = new TreeMap<String, Integer>();
+	}
+
+	/**
+	 * This method is to get the path of file
+	 * 
+	 * @return A path of file
+	 */
+	public static String getFileName() {
+		String filename = null;
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter file to process: ");
+		if (in.hasNext()) {
+			filename = in.next();
+		}
+		in.close();
+		return filename;
+	}
+
+	/**
+	 * This method read all content of a book and put them into a array list
+	 * @return Arraylist
+	 */
+	public ArrayList<String> readfile() {
+
+		ArrayList<String> book = new ArrayList<String>();
+
+		try {
+			String filename = getFileName(); // get path of file
+			System.out.println(filename);
+			File reader = new File(filename);
+			Scanner in = new Scanner(reader);
+
+			while (in.hasNext()) {
+				book.add(in.next().toLowerCase());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return book;
+	}
+
+	public Map<String, Integer> getBookMap() {
+		return bookMap;
+	}
+
+	public void setBookMap(Map<String, Integer> bookMap) {
+		this.bookMap = bookMap;
+	}
+
+	public static void main(String[] args) {
+
+		Q2 objQ2 = new Q2();
+		
+		// read book
+		ArrayList<String> st = new ArrayList<String>();
+		st = objQ2.readfile();
+
+		Set<String> unique = new HashSet<String>(st);
+		for (String key : unique) {
+			objQ2.getBookMap().put(key, Collections.frequency(st, key)); // put work and number of its into map
+		}
+
+		// show content of book
+		System.out.println("\n");
+		for (String s : objQ2.getBookMap().keySet())
+			System.out.println(s + " : " + objQ2.getBookMap().get(s));
+
+		// show biggest value
+		System.out.println("Biggest value:");
+		int t = Collections.max(objQ2.getBookMap().values());
+		for (String s : objQ2.getBookMap().keySet())
+			if (objQ2.getBookMap().get(s) == t)
+				System.out.println(s + " : " + objQ2.getBookMap().get(s));
+	}
+}
