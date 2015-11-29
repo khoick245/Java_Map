@@ -1,0 +1,169 @@
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+/**
+ * This program implement 2 map
+ * 
+ * @author khoi
+ *
+ */
+public class driver {
+
+	/**
+	 * This method is to print content of a Hash Map
+	 * 
+	 * @param m
+	 */
+	public static void printHashMap(Map<Integer, Employee> m) {
+		System.out.println("\n--Hash map--");
+		for (Map.Entry<Integer, Employee> me : m.entrySet()) {
+			System.out.println(me.getValue().toString());
+		}
+	}
+
+	/**
+	 * This method is to print content of a Tree Map
+	 * 
+	 * @param m
+	 */
+	public static void printTreeMap(Map<Employee, Integer> m) {
+		System.out.println("\n--Tree map--");
+		for (Map.Entry<Employee, Integer> me : m.entrySet()) {
+			System.out.println(me.getKey().toString() + " , " + me.getValue());
+		}
+	}
+
+	public static void main(String[] args) {
+
+		// create employee
+		Employee e1 = new Employee(23, "Kobe", "Bryan");
+		Employee e2 = new Employee(33, "Andy", "Carol");
+		Employee e3 = new Employee(43, "Luca", "Bryan");
+		Employee e4 = new Employee(53, "Buster", "Posey");
+		Employee e5 = new Employee(63, "Kobe", "Bryan");
+
+		// put data into hashmap
+		Map<Integer, Employee> hm = new HashMap<Integer, Employee>();
+		hm.put(e1.getID(), e1); // key: ID, value: employee object
+		hm.put(e2.getID(), e2);
+		hm.put(e3.getID(), e3);
+		hm.put(e4.getID(), e4);
+		hm.put(e5.getID(), e5);
+
+		// put data into treemap
+		Map<Employee, Integer> tm = new TreeMap<Employee, Integer>();
+		tm.put(e1, 2); // key: employee object, ID: performance
+		tm.put(e2, 1);
+		tm.put(e3, 3);
+		tm.put(e4, 5);
+		tm.put(e5, 4);
+
+		// create scanner for input
+		Scanner scner = new Scanner(System.in);
+
+		// random performance
+		Random rd = new Random();
+		int id;
+		String lname, fname;
+
+		int menu;
+
+		do {
+			System.out.println("---Menu--- ");
+			System.out.println("1. Show maps ");
+			System.out.println("2. Adding ");
+			System.out.println("3. Removing");
+			System.out.println("4. Modifying");
+			
+			
+			System.out.println("Enter task: ");
+			menu = scner.nextInt();
+
+			if (menu == 1) {
+				printHashMap(hm);
+				printTreeMap(tm);
+			}
+			if (menu == 2) {
+				// ----------- Adding employee ------------
+				System.out.println("\n-------Adding employee-------");
+				do { // enter ID to add
+					System.out.println("Enter ID employee to add: ");
+					id = scner.nextInt();
+				} while (hm.containsKey(id)); // until ID that doesn't exist
+
+				System.out.println("Enter last name: ");
+				scner.nextLine();
+				lname = scner.nextLine();
+				System.out.println("Enter first name: ");
+				fname = scner.nextLine();
+
+				Employee em = new Employee(id, fname, lname);
+
+				// put employee into map
+				hm.put(em.getID(), em);
+				tm.put(em, rd.nextInt(5) + 1);
+
+				// print 2 maps
+				printHashMap(hm);
+				printTreeMap(tm);
+
+			}
+			if (menu == 3) {
+				// --------- Remove employee ------------
+				System.out.println("\n------Removing employee--------");
+				do { // enter ID to remove
+					System.out.println("Enter ID employee need to remove: ");
+					id = scner.nextInt();
+				} while (!hm.containsKey(id));// until ID that existed
+
+				// remove employee from tree map
+				for (Iterator<Map.Entry<Employee, Integer>> it = tm.entrySet()
+						.iterator(); it.hasNext();) {
+					Map.Entry<Employee, Integer> entry = it.next();
+					if (entry.getKey().equals(hm.get(id))) {
+						it.remove();
+					}
+				}
+
+				// remove ID from hash map
+				hm.remove(id);
+
+				// print 2 maps
+				printHashMap(hm);
+				printTreeMap(tm);
+
+			}
+			if (menu == 4) {
+				// ------------ Modifying employee -------------
+				System.out.println("\n------Modifying employee--------");
+				int id2;
+				do { // enter ID to modify
+					System.out.println("Enter ID employee need to modify: ");
+					id2 = scner.nextInt();
+				} while (!hm.containsKey(id2));
+
+				Employee em2 = new Employee(id2, "", "");
+				scner.nextLine();
+
+				System.out.println("Enter performance: ");
+				int perform = scner.nextInt();
+
+				for (Map.Entry<Employee, Integer> me : tm.entrySet()) {
+					if (me.getKey().getID() == id2)
+						me.setValue(perform);
+				}
+
+				// print 2 maps
+				printHashMap(hm);
+				printTreeMap(tm);
+
+			}
+			System.out.println("");
+		} while (menu == 1 || menu == 2 || menu == 3 || menu == 4);
+
+	}
+}
