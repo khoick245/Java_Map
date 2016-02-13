@@ -1,4 +1,4 @@
-
+// Khoi Nguyen
 public class Employee implements Comparable<Employee>{
 	
 	private int ID;
